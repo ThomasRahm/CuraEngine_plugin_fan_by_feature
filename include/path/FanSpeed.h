@@ -156,7 +156,7 @@ public:
                              ((point_idx >= 0 && path_idx_back > last_set_path_idx) || point_idx >= last_set_point_idx) && ! added;
                              point_idx--)
                         {
-                            const bool path_back_is_travel = PathUtils::featureIsTravel(paths[path_idx]->feature());
+                            const bool path_back_is_travel = PathUtils::featureIsTravel(paths[path_idx_back]->feature());
                             const double previous_accumulated_time = accumulated_time;
 
                             // semi-arbitrary weight factor. Goal is to roughly distribute the error between both fan speeds (the fan speed before and the one of the current path)
