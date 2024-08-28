@@ -24,10 +24,16 @@ public:
 //Copied from CuraEngine but removed some material estimation code. Required for minimum layer time fan speed settings.
 static AllTimeEstimates computeNaiveTimeEstimates(const std::vector<const cura::plugins::v0::GCodePath*> paths, const plugin::Settings& settings, int extruder_nr)
 {
-
-    //double min_path_speed, double retraction_distance, double retraction_speed, double prime_speed
-        Point2D p0 = paths.front()->path().path(0);
         AllTimeEstimates estimates;
+        if(paths.empty())
+        {
+            return estimates;
+        }
+        Point2D p0;
+        if(paths.front()->path().path_size() > 0)
+        {
+            p0 = paths.front()->path().path(0);
+        }
         double slowest_path_speed = std::accumulate(
             paths.begin(),
             paths.end(),

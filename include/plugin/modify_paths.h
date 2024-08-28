@@ -50,6 +50,7 @@ struct ModifyPaths
 
             try
             {
+                spdlog::debug("Processing Layer {} Path count {}",request.layer_nr(), request.gcode_paths_size());
                 std::vector<const cura::plugins::v0::GCodePath*> paths;
                 for (int path_idx = 0; path_idx < request.gcode_paths_size(); path_idx++)
                 {
@@ -71,7 +72,7 @@ struct ModifyPaths
                     current_path->clear_path();
                     previous_fan_speed = fan_calc.getFanSpeed(path_idx, 0);
                     current_path->set_fan_speed(previous_fan_speed);
-                    spdlog::debug("Layer {}: Set actual fan speed to {}",request.layer_nr(), previous_fan_speed);
+                    spdlog::debug("Layer {} Path {}: Set actual fan speed to {}",request.layer_nr(), path_idx, previous_fan_speed);
 
                     for (int point_idx = 0; point_idx < path_size; point_idx++)
                     {
@@ -84,7 +85,7 @@ struct ModifyPaths
                             current_path->clear_path();
                             current_path->set_fan_speed(fan_speed);
                             previous_fan_speed = fan_speed;
-                            spdlog::debug("Layer {}: Set actual fan speed to {}",request.layer_nr(),previous_fan_speed);
+                            spdlog::debug("Layer {} Path {} Point {}: Set actual fan speed to {}",request.layer_nr(), path_idx, point_idx, previous_fan_speed);
                             current_path->set_retract(false);
                         }
                         auto* new_point = current_path->mutable_path()->add_path();
