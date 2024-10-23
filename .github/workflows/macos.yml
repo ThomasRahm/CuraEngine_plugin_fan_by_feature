@@ -6,7 +6,7 @@ on:
     inputs:
       plugin_conan_version:
         description: 'Plugin Conan Version'
-        default: 'curaengine_plugin_fan_by_feature/0.1.0@'
+        default: 'curaengine_plugin_fan_by_feature/1.0.0@'
         required: true
         type: string
       conan_args:
@@ -25,17 +25,15 @@ on:
       operating_system:
         description: 'OS'
         required: true
-        default: 'macos-11'
+        default: 'macos-12'
         type: choice
         options:
-          - self-hosted
-          - macos-11
           - macos-12
   workflow_call:
     inputs:
       plugin_conan_version:
         description: 'Plugin Conan Version'
-        default: 'curaengine_plugin_fan_by_feature/0.1.0@'
+        default: 'curaengine_plugin_fan_by_feature/1.0.0@'
         required: true
         type: string
       conan_args:
@@ -51,7 +49,7 @@ on:
       operating_system:
         description: 'OS'
         required: true
-        default: 'macos-11'
+        default: 'macos-12'
         type: string
 
 env:

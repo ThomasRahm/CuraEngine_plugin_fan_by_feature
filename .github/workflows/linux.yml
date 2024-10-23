@@ -6,7 +6,7 @@ on:
     inputs:
       plugin_conan_version:
         description: 'Plugin Conan Version'
-        default: 'curaengine_plugin_fan_by_feature/0.1.0@'
+        default: 'curaengine_plugin_fan_by_feature/1.0.0@'
         required: true
         type: string
       conan_args:
@@ -33,7 +33,7 @@ on:
     inputs:
       plugin_conan_version:
         description: 'Plugin Conan Version'
-        default: 'curaengine_plugin_fan_by_feature/0.1.0@'
+        default: 'curaengine_plugin_fan_by_feature/1.0.0@'
         required: true
         type: string
       conan_args:

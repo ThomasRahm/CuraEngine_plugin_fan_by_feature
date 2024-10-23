@@ -14,11 +14,11 @@ from jinja2 import Template
 required_conan_version = ">=1.58.0 <2.0.0"
 
 
-class CuraEngineGradualFlowPluginConan(ConanFile):
+class CuraEngineFanByFeaturePluginConan(ConanFile):
     name = "curaengine_plugin_fan_by_feature"
     description = "CuraEngine plugin for modifying fan speed by feature type"
     author = "Thomas Rahm"
-                                                                             
+    email = "None"
     license = "agpl-3.0"
     url = "https://github.com/ThomasRahm/curaengine_plugin_fan_by_feature"
     topics = ("protobuf", "asio", "plugin", "curaengine", "gcode-generation", "3D-printing")
@@ -112,6 +112,7 @@ class CuraEngineGradualFlowPluginConan(ConanFile):
         with open(os.path.join(self.source_folder, self._cura_plugin_name, "package.json"), "w") as f:
             f.write(template.render(author_id=self.author.lower(),
                                     author=self.author,
+                                    email=self.email,
                                     website_author=self.homepage,
                                     description=self.description,
                                     display_name=self._cura_plugin_name,
@@ -232,7 +233,6 @@ class CuraEngineGradualFlowPluginConan(ConanFile):
         copy(self, pattern="LICENSE", dst=os.path.join(self.package_folder, "licenses"), src=self.source_folder)
         ext = ".exe" if self.settings.os == "Windows" else ""
         copy(self, pattern=f"curaengine_plugin_fan_by_feature{ext}", dst=os.path.join(self.package_folder, "bin"), src=os.path.join(self.build_folder))
-                                                                                                                                                                                                           
 
         copy(self, pattern=f"bundled_{self._cura_plugin_name}.json", dst=os.path.join(self.package_folder, "res", "bundled_packages"), src=os.path.join(self.source_folder, self._cura_plugin_name))
         copy(self, pattern="*", dst=os.path.join(self.package_folder, "res", "plugins", self._cura_plugin_name), src=os.path.join(self.source_folder, self._cura_plugin_name))

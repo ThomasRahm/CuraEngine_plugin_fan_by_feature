@@ -5,7 +5,7 @@
       "package_type": "plugin",
       "display_name": "CuraEngineFanSpeedByFeatureType",
       "description": "CuraEngine plugin for modifying fan speed by feature type",
-      "package_version": "0.1.0",
+      "package_version": "1.0.0",
       "sdk_version": "8.4.0",
       "website": "https://github.com/ThomasRahm/curaengine_plugin_fan_by_feature",
       "author": {

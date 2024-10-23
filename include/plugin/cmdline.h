@@ -43,7 +43,7 @@ namespace plugin::cmdline
 {
 
 constexpr std::string_view NAME = "CuraEngineFanSpeedByFeatureType";
-constexpr std::string_view VERSION = "0.1.0";
+constexpr std::string_view VERSION = "1.0.0";
 static const auto VERSION_ID = fmt::format(FMT_COMPILE("{} {}"), NAME, VERSION);
 
 constexpr std::string_view USAGE = R"({0}.
