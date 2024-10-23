@@ -112,7 +112,7 @@
         "cool_fan_spin_time":
         {
             "label": "Fan Velocity Change Time",
-            "description": "The maximum time it takes for the part cooling fan to reach any other speed. Smaller changes are linearly interpolated.",
+            "description": "The maximum time it takes for the part cooling fan to switch between 100% and 0% fan speed. Smaller changes are linearly interpolated.",
             "unit": "s",
             "type": "float",
             "default_value": 0.5,
