@@ -170,11 +170,11 @@ class CuraEngineFanByFeaturePluginConan(ConanFile):
     def requirements(self):
         for req in self.conan_data["requirements"]:
             self.requires(req)
-        self.requires("protobuf/3.21.9")
-        self.requires("boost/1.82.0")
+        self.requires("protobuf/3.21.12")
+        self.requires("boost/1.83.0")
                                        
         self.requires("asio-grpc/2.6.0")
-        self.requires("openssl/1.1.1l")
+        self.requires("openssl/3.2.0")
         self.requires("spdlog/1.12.0")
         self.requires("fmt/10.1.1")
         self.requires("docopt.cpp/0.6.3")
