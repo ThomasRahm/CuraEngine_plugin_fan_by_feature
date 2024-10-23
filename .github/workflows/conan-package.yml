@@ -21,13 +21,13 @@ on:
 
 jobs:
   conan-recipe-version:
-    uses: ultimaker/cura/.github/workflows/conan-recipe-version.yml@main
+    uses: ultimaker/cura-workflows/.github/workflows/conan-recipe-version.yml@main
     with:
       project_name: curaengine_plugin_fan_by_feature
 
   conan-package-export:
     needs: [ conan-recipe-version ]
-    uses: ultimaker/cura/.github/workflows/conan-recipe-export.yml@main
+    uses: ultimaker/cura-workflows/.github/workflows/conan-recipe-export.yml@main
     with:
       recipe_id_full: ${{ needs.conan-recipe-version.outputs.recipe_id_full }}
       recipe_id_latest: ${{ needs.conan-recipe-version.outputs.recipe_id_latest }}
