@@ -101,12 +101,6 @@ public:
             NEVER,
             LEGACY
         };
-        std::string mlt_string = "all"; // Todo make this a setting?
-
-        MinimumLayerTimeValidity apply_mlt_to
-            = (mlt_string == "only_outer")
-                ? MinimumLayerTimeValidity::ONLY_OUTER
-                : (mlt_string == "all" ? MinimumLayerTimeValidity::ALL : (mlt_string == "legacy" ? MinimumLayerTimeValidity::LEGACY : MinimumLayerTimeValidity::NEVER));
 
         fanSpeedCache = std::vector<std::vector<std::pair<size_t, double>>>(std::max(paths.size(), size_t(1)));
         double initial_fan_speed
@@ -120,11 +114,36 @@ public:
         bool added_non_travel_cooling = paths.size() == 0 ? false : ! PathUtils::featureIsTravel(paths.front()->feature());
         double first_extrude_fan_speed = -1;
 
-        for (int64_t path_idx = 1; path_idx < paths.size(); path_idx++)
+        for (int64_t path_idx = 0; path_idx < paths.size(); path_idx++)
         {
             const std::string mesh_name = paths[path_idx]->mesh_name();
             double max_spin_up_time = settings.get<double>("cool_fan_spin_up_time", extruder_nr, mesh_name);
             double max_spin_down_time = settings.get<double>("cool_fan_spin_down_time", extruder_nr, mesh_name);
+            std::string mlt_string = settings.get<std::string>("cool_fan_mlt_mode", extruder_nr, mesh_name);
+
+            MinimumLayerTimeValidity apply_mlt_to;
+            if(mlt_string == "only_outer")
+            {
+                apply_mlt_to = MinimumLayerTimeValidity::ONLY_OUTER;
+            }
+            else if(mlt_string == "all")
+            {
+                apply_mlt_to = MinimumLayerTimeValidity::ALL;
+            }
+            else if(mlt_string == "legacy")
+            {
+                apply_mlt_to = MinimumLayerTimeValidity::LEGACY;
+            }
+            else if(mlt_string == "never")
+            {
+                apply_mlt_to = MinimumLayerTimeValidity::NEVER;
+            }
+            else
+            {
+                spdlog::error("Invalid MLT string found. Assuming legacy!");
+                apply_mlt_to = MinimumLayerTimeValidity::LEGACY;
+            }
+
             // Iterate through paths until fan speed changed, then go back for spin time
             double path_fan_speed = applyInitialLayersFanSpeedModification(getFanSpeedOfPath(paths[path_idx]));
             if (path_fan_speed < 0)

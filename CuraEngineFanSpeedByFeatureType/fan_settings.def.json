@@ -141,6 +141,21 @@
             "enabled": "cool_fan_enabled",
             "settable_per_mesh": false,
             "settable_per_extruder": true
+        },
+        "cool_fan_mlt_mode":
+        {
+            "label": "Minimum Layer Time Fan Mode",
+            "description": "<html>How the minimum layer time fan speed settings should be applied:<ul><li><b>Never:</b> Minimum layer time will not affect fan speed. Settings like \"Maximum Fan Speed\" and \"Regular/Maximum Fan Speed Threshold\" will be ignored.</li><li><b>Always:</b> Fan speed changes caused by minimum layer time are applied to all extrusion paths.</li><li><b>Cura default:</b> Fan speed changes caused by minimum layer time are only applied to the last extruder on each layer.</li><li><b>Only outer walls:</b> Fan speed changes caused by minimum layer time are only applied to the outer wall fan speed.</li></ul></html>",
+            "type": "enum",
+            "options":
+            {
+                "never": "Never",
+                "all": "Always",
+                "legacy": "Cura default",
+                "only_outer": "Only outer walls"
+            },
+            "default_value": "legacy",
+            "settable_per_mesh": true
         }
     }
   }

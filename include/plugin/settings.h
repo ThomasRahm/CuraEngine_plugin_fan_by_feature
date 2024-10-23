@@ -40,7 +40,8 @@ struct Settings
         "retraction_amount",
         "cool_min_speed",
         "cool_min_layer_time",
-        "cool_fan_speed_max"
+        "cool_fan_speed_max",
+        "cool_fan_mlt_mode"
     };
 
     // map[setting_key] => pair(extruder_values,model_values)

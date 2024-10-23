@@ -72,7 +72,7 @@ struct ModifyPaths
                     current_path->clear_path();
                     previous_fan_speed = fan_calc.getFanSpeed(path_idx, 0);
                     current_path->set_fan_speed(previous_fan_speed);
-                    spdlog::debug("Layer {} Path {}: Set actual fan speed to {}",request.layer_nr(), path_idx, previous_fan_speed);
+                    spdlog::debug("Layer {} Path {} Type {}: Set actual fan speed to {}",request.layer_nr(), path_idx, int(paths[path_idx]->feature()), previous_fan_speed);
 
                     for (int point_idx = 0; point_idx < path_size; point_idx++)
                     {
