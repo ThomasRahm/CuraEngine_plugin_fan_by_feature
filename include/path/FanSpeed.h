@@ -26,7 +26,7 @@
 namespace fan_speed
 {
 using LayerIndex = int64_t;
-using Point2D = cura::plugins::v0::Point2D;
+using Point3D = cura::plugins::v0::Point3D;
 using PrintFeature = cura::plugins::v0::PrintFeature;
 using GCodePath = cura::plugins::v0::GCodePath;
 class FanSpeedCalculator

@@ -91,6 +91,7 @@ struct ModifyPaths
                         auto* new_point = current_path->mutable_path()->add_path();
                         new_point->set_x(point.x());
                         new_point->set_y(point.y());
+                        new_point->set_z(point.z());
                     }
                 }
             }

@@ -7,7 +7,7 @@
 namespace fan_speed
 {
 using PrintFeature = cura::plugins::v0::PrintFeature;
-using Point2D = cura::plugins::v0::Point2D;
+using Point3D = cura::plugins::v0::Point3D;
 
 class PathUtils
 {
@@ -18,7 +18,7 @@ public:
         return feature == 0 || feature == 8 || feature == 9;
     }
 
-    static double vSize(Point2D a, Point2D b)
+    static double vSize(Point3D a, Point3D b)
     {
         double x_delta = a.x() - b.x();
         double y_delta = a.y() - b.y();

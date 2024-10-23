@@ -9,7 +9,7 @@
 namespace fan_speed
 {
 using GCodePath = cura::plugins::v0::GCodePath;
-using Point2D = cura::plugins::v0::Point2D;
+using Point3D = cura::plugins::v0::Point3D;
 
 struct AllTimeEstimates
 {
@@ -29,7 +29,7 @@ static AllTimeEstimates computeNaiveTimeEstimates(const std::vector<const cura::
         {
             return estimates;
         }
-        Point2D p0;
+        Point3D p0;
         if(paths.front()->path().path_size() > 0)
         {
             p0 = paths.front()->path().path(0);
@@ -88,7 +88,7 @@ static AllTimeEstimates computeNaiveTimeEstimates(const std::vector<const cura::
             }
             for (int64_t point_idx = 0; point_idx<path->path().path_size();point_idx++)
             {
-                Point2D p1 = path->path().path(point_idx);
+                Point3D p1 = path->path().path(point_idx);
                 double length = double(PathUtils::vSize(p0, p1))/1000.0;
                 if (is_extrusion_path)
                 {
