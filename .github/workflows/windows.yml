@@ -101,7 +101,7 @@ jobs:
         run: conan install $Env:PLUGIN_CONAN_VERSION ${{ inputs.conan_args }} --build=missing --update -if plugin_inst
 
       - name: Upload the binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-${{ runner.arch }}
           path: |
@@ -109,7 +109,7 @@ jobs:
           retention-days: 5
 
       - name: Upload the cura plugin
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-cura-plugin
           path: |
@@ -126,7 +126,7 @@ jobs:
 
       # NOTE: The extension is .sh, since this isn't going to build-environment, so not on the Win build image.
       - name: Upload the run info
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-run-info
           path: |
