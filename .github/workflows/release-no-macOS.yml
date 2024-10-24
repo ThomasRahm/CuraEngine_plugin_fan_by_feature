@@ -62,26 +62,26 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: Linux-X64
-          path: cura-plugin/CuraEngineFanSpeedByFeatureType/x86_64/Linux
+          path: cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/x86_64/Linux
 
       - name: Download win X64 binaries artifacts
         uses: actions/download-artifact@v4
         with:
           name: Windows-X64
-          path: cura-plugin/CuraEngineFanSpeedByFeatureType/x86_64/Windows
+          path: cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/x86_64/Windows
 
       - name: Upload the Cura plugin source
         uses: actions/upload-artifact@v4
         with:
           name: cura-plugin
           path: |
-            cura-plugin/CuraEngineFanSpeedByFeatureType/**/*
+            cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/**/*
           retention-days: 5
 
       - uses: fieldOfView/cura-plugin-packager-action@main
         with:
-          source_folder: "cura-plugin/CuraEngineFanSpeedByFeatureType"
-          package_info_path: "cura-plugin/CuraEngineFanSpeedByFeatureType/package.json"
+          source_folder: "cura-plugin/plugins/CuraEngineFanSpeedByFeatureType"
+          package_info_path: "cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/package.json"
 
       - name: Upload the Cura package
         uses: actions/upload-artifact@v3
