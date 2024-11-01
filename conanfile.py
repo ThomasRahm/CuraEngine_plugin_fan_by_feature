@@ -170,9 +170,8 @@ class CuraEngineFanByFeaturePluginConan(ConanFile):
     def requirements(self):
         for req in self.conan_data["requirements"]:
             self.requires(req)
-        self.requires("protobuf/3.21.12")
-        self.requires("boost/1.83.0")
-                                       
+        self.requires("protobuf/3.21.9")
+        self.requires("boost/1.82.0")
         self.requires("asio-grpc/2.6.0")
         self.requires("openssl/3.2.0")
         self.requires("spdlog/1.12.0")
@@ -182,6 +181,7 @@ class CuraEngineFanByFeaturePluginConan(ConanFile):
         self.requires("clipper/6.4.2")
         self.requires("ctre/3.7.2")
         self.requires("neargye-semver/0.3.0")
+        self.requires("grpc/1.50.1")
 
     def build_requirements(self):
         self.test_requires("standardprojectsettings/[>=0.1.0]@ultimaker/stable")
