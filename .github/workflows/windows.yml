@@ -98,7 +98,7 @@ jobs:
         run: conan config set storage.download_cache="C:\Users\runneradmin\.conan\conan_download_cache"
 
       - name: Create the Packages (Powershell)
-        run: conan install ${{ inputs.plugin_conan_version }} ${{ inputs.conan_args }} --build=missing -s curaengine_plugin_fan_by_feature*:build_type=Release -s build_type=Debug --update -if plugin_inst
+        run: conan install . ${{ inputs.conan_args }} -if=plugin_inst --build=missing --update -s "&:build_type=Release" -s "build_type=Debug"
 
       - name: Upload the binary
         uses: actions/upload-artifact@v4
