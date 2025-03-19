@@ -1,10 +1,4 @@
----
 name: conan-package
-
-# Exports the recipe, sources and binaries for Mac, Windows and Linux and upload these to the server such that these can
-# be used downstream.
-#
-# It should run on pushes against main or CURA-* branches, but it will only create the binaries for main and release branches
 
 on:
   workflow_dispatch:
@@ -20,18 +14,6 @@ on:
         description: 'Create latest alias'
 
 jobs:
-  conan-recipe-version:
-    uses: ultimaker/cura-workflows/.github/workflows/conan-recipe-version.yml@main
-    with:
-      project_name: curaengine_plugin_fan_by_feature
-
-  conan-package-export:
-    needs: [ conan-recipe-version ]
-    uses: ultimaker/cura-workflows/.github/workflows/conan-recipe-export.yml@main
-    with:
-      recipe_id_full: ${{ needs.conan-recipe-version.outputs.recipe_id_full }}
-      recipe_id_latest: ${{ needs.conan-recipe-version.outputs.recipe_id_latest }}
-      runs_on: 'ubuntu-22.04'
-      python_version: '3.11.x'
-      conan_logging_level: 'info'
+  conan-package:
+    uses: ultimaker/cura-workflows/.github/workflows/conan-package.yml@main
     secrets: inherit

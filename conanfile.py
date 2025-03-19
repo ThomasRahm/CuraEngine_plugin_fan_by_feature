@@ -5,13 +5,12 @@ from conan.errors import ConanInvalidConfiguration
 from conan.tools.build import check_min_cppstd
 from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
 from conan.tools.env import VirtualBuildEnv
-from conan.tools.files import copy, update_conandata
+from conan.tools.files import copy
 from conan.tools.microsoft import check_min_vs, is_msvc_static_runtime, is_msvc
 from conan.tools.scm import Version
-
 from jinja2 import Template
 
-required_conan_version = ">=1.58.0 <2.0.0"
+required_conan_version = ">=2.7.0"
 
 
 class CuraEngineFanByFeaturePluginConan(ConanFile):
@@ -22,7 +21,7 @@ class CuraEngineFanByFeaturePluginConan(ConanFile):
     license = "agpl-3.0"
     url = "https://github.com/ThomasRahm/curaengine_plugin_fan_by_feature"
     topics = ("protobuf", "asio", "plugin", "curaengine", "gcode-generation", "3D-printing")
-    package_type = "application"
+    package_type = "library"
     settings = "os", "arch", "compiler", "build_type"
                         
     options = {
@@ -62,7 +61,7 @@ class CuraEngineFanByFeaturePluginConan(ConanFile):
 
     @property
     def _sdk_versions(self):
-        return ["8.4.0"]
+        return ["8.5.0"]
 
     @property
     def _max_sdk_version(self):
@@ -123,30 +122,11 @@ class CuraEngineFanByFeaturePluginConan(ConanFile):
                                     website=self.url
                                     ))
 
-    def _generate_bundled_metadata(self):
-        with open(os.path.join(self.source_folder, "templates", "cura_plugin", "bundled.json.jinja"), "r") as f:
-            template = Template(f.read())
-
-        version = Version(self.version)
-        with open(os.path.join(self.source_folder, self._cura_plugin_name, f"bundled_{self._cura_plugin_name}.json"), "w") as f:
-            f.write(template.render(package_id=self._cura_plugin_name,
-                                    display_name=self._cura_plugin_name,
-                                    description=self.description,
-                                    version=f"{version.major}.{version.minor}.{version.patch}",
-                                    sdk_version=self._max_sdk_version,
-                                    author=self.author,
-                                    website=self.url,
-                                    website_author=self.homepage))
-
-    def export(self):
-        update_conandata(self, {"version": self.version})
-
     def export_sources(self):
         copy(self, "CMakeLists.txt", self.recipe_folder, self.export_sources_folder)
-        copy(self, "*.jinja", os.path.join(self.recipe_folder, "templates"), os.path.join(self.export_sources_folder, "templates"))
         copy(self, "*", os.path.join(self.recipe_folder, "src"), os.path.join(self.export_sources_folder, "src"))
         copy(self, "*", os.path.join(self.recipe_folder, "include"), os.path.join(self.export_sources_folder, "include"))
-        copy(self, "*", os.path.join(self.recipe_folder, "tests"), os.path.join(self.export_sources_folder, "tests"))
+        copy(self, "*", os.path.join(self.recipe_folder, "templates"), os.path.join(self.export_sources_folder, "templates"))
         copy(self, "*", os.path.join(self.recipe_folder, self._cura_plugin_name), os.path.join(self.export_sources_folder, self._cura_plugin_name))
 
     def config_options(self):
@@ -155,38 +135,24 @@ class CuraEngineFanByFeaturePluginConan(ConanFile):
 
     def configure(self):
         self.options["boost"].header_only = True
-
         if self.options.shared:
             self.options.rm_safe("fPIC")
 
     def layout(self):
         cmake_layout(self)
-        self.cpp.package.resdirs = [os.path.join("res", "plugins", self._cura_plugin_name).replace("\\", "/"),
-                                    os.path.join("res", "bundled_packages").replace("\\", "/")]
-
-                                 
-                                                                                
+        self.cpp.package.resdirs = [os.path.join("res", self._cura_plugin_name).replace("\\", "/")]
+        self.cpp.build.bins = ["curaengine_plugin_fan_by_feature"]
 
     def requirements(self):
-        for req in self.conan_data["requirements"]:
-            self.requires(req)
-        self.requires("protobuf/3.21.9")
-        self.requires("boost/1.82.0")
-        self.requires("asio-grpc/2.6.0")
-        self.requires("openssl/3.2.0")
-        self.requires("spdlog/1.12.0")
-        self.requires("fmt/10.1.1")
+        self.requires("boost/1.86.0")
+        self.requires("openssl/3.2.1")
+        self.requires("spdlog/1.10.0")
         self.requires("docopt.cpp/0.6.3")
         self.requires("range-v3/0.12.0")
         self.requires("clipper/6.4.2")
         self.requires("ctre/3.7.2")
         self.requires("neargye-semver/0.3.0")
-        self.requires("grpc/1.50.1")
-
-    def build_requirements(self):
-        self.test_requires("standardprojectsettings/[>=0.1.0]@ultimaker/stable")
-        if not self.conf.get("tools.build:skip_test", False, check_type=bool):
-            self.test_requires("catch2/3.4.0")
+        self.requires("curaengine_grpc_definitions/0.3.1")
 
     def validate(self):
         # validate the minimum cpp standard supported. For C++ projects only
@@ -199,21 +165,18 @@ class CuraEngineFanByFeaturePluginConan(ConanFile):
                 raise ConanInvalidConfiguration(
                     f"{self.ref} requires C++{self._min_cppstd}, which your compiler does not support."
                 )
-        if is_msvc(self) and self.options.shared:
-            raise ConanInvalidConfiguration(f"{self.ref} can not be built as shared on Visual Studio and msvc.")
 
     def generate(self):
         self._generate_cmdline()
         self._generate_cura_plugin_constants()
         self._generate_plugin_metadata()
         self._generate_package_metadata()
-        self._generate_bundled_metadata()
 
         # BUILD_SHARED_LIBS and POSITION_INDEPENDENT_CODE are automatically parsed when self.options.shared or self.options.fPIC exist
         tc = CMakeToolchain(self)
-        tc.variables["ENABLE_TESTS"] = not self.conf.get("tools.build:skip_test", False, check_type=bool)
+        # Boolean values are preferred instead of "ON"/"OFF"
         if is_msvc(self):
-                                                                      
+            tc.cache_variables["CMAKE_POLICY_DEFAULT_CMP0091"] = "NEW"
             tc.variables["USE_MSVC_RUNTIME_LIBRARY_DLL"] = not is_msvc_static_runtime(self)
         tc.cache_variables["CMAKE_POLICY_DEFAULT_CMP0077"] = "NEW"
         tc.generate()
@@ -233,9 +196,7 @@ class CuraEngineFanByFeaturePluginConan(ConanFile):
         copy(self, pattern="LICENSE", dst=os.path.join(self.package_folder, "licenses"), src=self.source_folder)
         ext = ".exe" if self.settings.os == "Windows" else ""
         copy(self, pattern=f"curaengine_plugin_fan_by_feature{ext}", dst=os.path.join(self.package_folder, "bin"), src=os.path.join(self.build_folder))
-
-        copy(self, pattern=f"bundled_{self._cura_plugin_name}.json", dst=os.path.join(self.package_folder, "res", "bundled_packages"), src=os.path.join(self.source_folder, self._cura_plugin_name))
-        copy(self, pattern="*", dst=os.path.join(self.package_folder, "res", "plugins", self._cura_plugin_name), src=os.path.join(self.source_folder, self._cura_plugin_name))
+        copy(self, pattern="*", dst=os.path.join(self.package_folder, "res", self._cura_plugin_name), src=os.path.join(self.source_folder, self._cura_plugin_name))
 
     def deploy(self):
         ext = ".exe" if self.settings.os == "Windows" else ""

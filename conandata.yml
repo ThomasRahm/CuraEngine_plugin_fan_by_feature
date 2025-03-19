@@ -1,3 +1,3 @@
 version: "1.0.0"
 requirements:
-    - "curaengine_grpc_definitions/0.2.1"
+    - "curaengine_grpc_definitions/0.3.1"

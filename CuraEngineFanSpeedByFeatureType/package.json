@@ -11,6 +11,6 @@
   "package_type": "plugin",
   "package_version": "1.0.0",
   "sdk_version": 8,
-  "sdk_version_semver": "8.4.0",
+  "sdk_version_semver": "8.5.0",
   "website": "https://github.com/ThomasRahm/curaengine_plugin_fan_by_feature"
 }
