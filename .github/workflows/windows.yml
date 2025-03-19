@@ -92,13 +92,13 @@ jobs:
           conan config install https://github.com/ThomasRahm/conan-config.git -a "-b runner/${{ runner.os }}/${{ runner.arch }}"
 
       - name: Setup local conan package (Powershell)
-        run: conan export . $Env:PLUGIN_CONAN_VERSION   
+        run: conan export . $env:PLUGIN_CONAN_VERSION
 
       - name: Use Conan download cache (Powershell)
         run: conan config set storage.download_cache="C:\Users\runneradmin\.conan\conan_download_cache"
 
       - name: Create the Packages (Powershell)
-        run: conan install $Env:PLUGIN_CONAN_VERSION ${{ inputs.conan_args }} --build=missing -s "$Env:PLUGIN_CONAN_VERSION:build_type=Release" -s "build_type=Debug" --update -if plugin_inst
+        run: conan install . ${{ inputs.conan_args }} -if=plugin_inst --build=missing --update -s "&:build_type=Release" -s "build_type=Debug"
 
       - name: Upload the binary
         uses: actions/upload-artifact@v4
