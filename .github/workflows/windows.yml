@@ -88,17 +88,19 @@ jobs:
 
       - name: Get Conan configuration
         run: |
-          conan config install https://github.com/ThomasRahm/conan-config.git
-          conan config install https://github.com/ThomasRahm/conan-config.git -a "-b runner/${{ runner.os }}/${{ runner.arch }}"
-
-      - name: Setup local conan package (Powershell)
-        run: conan export . $env:PLUGIN_CONAN_VERSION
+          conan config install https://github.com/Ultimaker/conan-config.git
+          conan config install https://github.com/Ultimaker/conan-config.git -a "-b runner/${{ runner.os }}/${{ runner.arch }}"
 
       - name: Use Conan download cache (Powershell)
         run: conan config set storage.download_cache="C:\Users\runneradmin\.conan\conan_download_cache"
 
       - name: Create the Packages (Powershell)
-        run: conan install . ${{ inputs.conan_args }} -if=plugin_inst --build=missing --update -s "&:build_type=Release" -s "build_type=Debug"
+        run: conan install $Env:PLUGIN_CONAN_VERSION ${{ inputs.conan_args }} --build=missing --update --output-folder=plugin_inst
+
+      - name: Upload the Package(s)
+        if: always()
+        run: |
+          conan upload "*" -r cura --all -c
 
       - name: Upload the binary
         uses: actions/upload-artifact@v4

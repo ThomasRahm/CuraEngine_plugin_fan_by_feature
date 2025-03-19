@@ -104,7 +104,7 @@ jobs:
         run: conan export . $PLUGIN_CONAN_VERSION
 
       - name: Create the Packages (Bash)
-        run: conan install $PLUGIN_CONAN_VERSION ${{ inputs.conan_args }} --build=missing --update -if plugin_inst
+        run: conan install $PLUGIN_CONAN_VERSION ${{ inputs.conan_args }} --build=missing --update --output-folder=plugin_inst
 
       - name: Upload the binary
         uses: actions/upload-artifact@v3
