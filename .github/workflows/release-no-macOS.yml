@@ -56,7 +56,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: linux-cura-plugin
-          path: cura-plugin
+          path: cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/
 
       - name: Download linux modern binary artifacts
         uses: actions/download-artifact@v4
@@ -84,7 +84,7 @@ jobs:
           package_info_path: "cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/package.json"
 
       - name: Upload the Cura package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cura-package
           path: |

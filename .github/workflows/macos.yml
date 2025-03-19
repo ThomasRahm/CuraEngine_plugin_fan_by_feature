@@ -66,9 +66,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Python and pip
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10.x'
+          python-version: '3.13'
           cache: 'pip'
           cache-dependency-path: .github/workflows/requirements-conan-package.txt
 
@@ -79,47 +79,36 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            $HOME/.conan/data
-            $HOME/.conan/conan_download_cache
+            $HOME/.conan2/p
           key: conan-${{ runner.os }}-${{ runner.arch }}-installer-cache
 
       - name: Install MacOS system requirements
         run: brew install cmake autoconf automake ninja create-dmg
 
       - name: Create the default Conan profile
-        run: conan profile new default --detect --force
+        run: conan profile detect --force
 
       - name: Get Conan configuration
         run: |
           conan config install https://github.com/Ultimaker/conan-config.git
-          conan config install https://github.com/Ultimaker/conan-config.git -a "-b runner/${{ runner.os }}/${{ runner.arch }}"
-
-      - name: Use Conan download cache (Bash)
-        run: conan config set storage.download_cache="$HOME/.conan/conan_download_cache"
-
-      - name: Remove private Artifactory
-        run: conan remote remove cura-conan-private || true
-
-      - name: Setup local conan package (Bash)
-        run: conan export . $PLUGIN_CONAN_VERSION
 
       - name: Create the Packages (Bash)
-        run: conan install $PLUGIN_CONAN_VERSION ${{ inputs.conan_args }} --build=missing --update --output-folder=plugin_inst
+        run: conan build . ${{ inputs.conan_args }} --build=missing --update
 
       - name: Upload the binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-${{ runner.arch }}
           path: |
-            plugin_inst/curaengine_plugin_fan_by_feature
+            build/Release/curaengine_plugin_fan_by_feature
           retention-days: 5
 
       - name: Upload the cura plugin
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos-cura-plugin
           path: |
-            plugin_inst/CuraEngineFanSpeedByFeatureType/**/*
+            CuraEngineFanSpeedByFeatureType/**/*
           retention-days: 5
 
       - name: Write the run info
