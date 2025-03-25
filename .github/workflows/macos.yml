@@ -79,7 +79,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            $HOME/.conan2/p
+            /Users/runner/.conan2/p
           key: conan-${{ runner.os }}-${{ runner.arch }}-installer-cache
 
       - name: Install MacOS system requirements
@@ -106,7 +106,7 @@ jobs:
       - name: Upload the cura plugin
         uses: actions/upload-artifact@v4
         with:
-          name: macos-cura-plugin
+          name: macos-cura-plugin-${{ runner.arch }}
           path: |
             CuraEngineFanSpeedByFeatureType/**/*
           retention-days: 5
@@ -121,7 +121,7 @@ jobs:
       - name: Upload the run info
         uses: actions/upload-artifact@v4
         with:
-          name: macos-run-info
+          name: macos-run-info-${{ runner.arch }}
           path: |
             run_info.sh
           retention-days: 5

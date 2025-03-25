@@ -82,13 +82,13 @@ jobs:
           path: cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/x86_64/Linux
 
       - name: Download mac x64 binary artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: macOS-X64
           path: cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/x86_64/Darwin
 
       - name: Download mac arm binary artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: macOS-ARM64
           path: cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/arm64/Darwin
