@@ -25,10 +25,10 @@ on:
       operating_system:
         description: 'OS'
         required: true
-        default: 'macos-12'
+        default: 'macos-13'
         type: choice
         options:
-          - macos-12
+          - macos-13
   workflow_call:
     inputs:
       plugin_conan_version:
@@ -49,7 +49,7 @@ on:
       operating_system:
         description: 'OS'
         required: true
-        default: 'macos-12'
+        default: 'macos-13'
         type: string
 
 env:
@@ -119,7 +119,7 @@ jobs:
               f.writelines(f'echo "PLUGIN_CONAN_VERSION={os.environ["PLUGIN_CONAN_VERSION"]}" >> $GITHUB_ENV\n')
 
       - name: Upload the run info
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos-run-info
           path: |

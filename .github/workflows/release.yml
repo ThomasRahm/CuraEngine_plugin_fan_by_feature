@@ -40,20 +40,28 @@ jobs:
       plugin_conan_version: ${{ inputs.plugin_conan_version }}
       conan_args: ${{ inputs.conan_args }}
       architecture: X64
-      operating_system: macos-12
+      operating_system: macos-13
     secrets: inherit
 
+  macos-arm-installer:
+    uses: ./.github/workflows/macos.yml
+    with:
+      plugin_conan_version: ${{ inputs.plugin_conan_version }}
+      conan_args: ${{ inputs.conan_args }}
+      architecture: ARM64
+      operating_system: macos-15
+    secrets: inherit
 
   create-curapackages:
     runs-on: "ubuntu-latest"
-    needs: [ windows-installer, linux-modern-installer, macos-installer ]
+    needs: [ windows-installer, linux-modern-installer, macos-installer, macos-arm-installer ]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Download the run info
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: linux-run-info
 
@@ -62,44 +70,50 @@ jobs:
           . run_info.sh 
 
       - name: Download the Cura plugin
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: linux-cura-plugin
-          path: cura-plugin
+          path: cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/
 
       - name: Download linux modern binary artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: Linux-X64
-          path: cura-plugin/CuraEngineFanSpeedByFeatureType/x86_64/Linux
+          path: cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/x86_64/Linux
 
       - name: Download mac x64 binary artifacts
         uses: actions/download-artifact@v2
         with:
           name: macOS-X64
-          path: cura-plugin/CuraEngineFanSpeedByFeatureType/x86_64/Darwin
+          path: cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/x86_64/Darwin
 
-      - name: Download win X64 binaries artifacts
+      - name: Download mac arm binary artifacts
         uses: actions/download-artifact@v2
         with:
+          name: macOS-ARM64
+          path: cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/arm64/Darwin
+
+      - name: Download win X64 binaries artifacts
+        uses: actions/download-artifact@v4
+        with:
           name: Windows-X64
-          path: cura-plugin/CuraEngineFanSpeedByFeatureType/x86_64/Windows
+          path: cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/x86_64/Windows
 
       - name: Upload the Cura plugin source
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cura-plugin
           path: |
-            cura-plugin/CuraEngineFanSpeedByFeatureType/**/*
+            cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/**/*
           retention-days: 5
 
       - uses: fieldOfView/cura-plugin-packager-action@main
         with:
-          source_folder: "cura-plugin/CuraEngineFanSpeedByFeatureType"
-          package_info_path: "cura-plugin/CuraEngineFanSpeedByFeatureType/package.json"
+          source_folder: "cura-plugin/plugins/CuraEngineFanSpeedByFeatureType"
+          package_info_path: "cura-plugin/plugins/CuraEngineFanSpeedByFeatureType/package.json"
 
       - name: Upload the Cura package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cura-package
           path: |
